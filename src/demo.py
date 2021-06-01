@@ -8,10 +8,11 @@ from tqdm import tqdm
 from time import time
 import torch
 import matplotlib.pyplot as plt
-from .reconstruction_methods.lasso import lasso_numba, lasso_batch_numba
-from .reconstruction_methods.lasso_cython import lasso_cython, lasso_batch_cython
-from .reconstruction_methods.omp import OMP_numba, OMP_batch_numba
-from .reconstruction_methods.omp_cython import OMP_cython, OMP_batch_cython
+from . import reconstruction_methods as methods
+# from .reconstruction_methods.lasso import lasso_batch_numba, lasso_numba
+# from .reconstruction_methods.lasso_cython import lasso_batch_cython, lasso_cython
+# from .reconstruction_methods.omp import OMP_batch_numba, OMP_numba
+# from .reconstruction_methods.omp_cython import OMP_batch_cython, OMP_cython
 import argparse
 
 
@@ -105,15 +106,16 @@ def main():
 
     args = parser.parse_args()
 
-    reconstruction_method = globals()[args.method]
+    # reconstruction_method = globals()[args.method]
+    reconstruction_method = getattr(methods, args.method)
 
     file = np.load('data/dictionary.npz', allow_pickle=True)
     dictionary = file["dict"].T
     dictionary = np.array(dictionary, order="C", dtype=np.float32)
 
-    nb_images = 10
+    nb_images = 1000  # total is 50000
     nb_patches = 15*15*nb_images
-    batch_size = 10 if "batch" in args.method else 1  # 5000 is the optimal
+    batch_size = 100 if "batch" in args.method else 1  # 5000 is the optimal
 
     train_loader, _ = get_cifar10()
     images = train_loader.dataset.data[:nb_images].astype(np.float32)
@@ -121,7 +123,7 @@ def main():
     patches = extract_patches(images, (4, 4, 3), 2)
     patches = patches.reshape(patches.shape[0], -1)
 
-    ray.init(num_cpus=12)
+    ray.init(num_cpus=40)
     patches_id = ray.put(patches)
     dictionary_id = ray.put(dictionary)
 

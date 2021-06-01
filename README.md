@@ -7,25 +7,25 @@ This repository implements orthogonal matching pursuit (OMP) and least absolute 
 Install the requirements:
 
 ```bash
-sudo apt-get install libblas-dev liblapack-dev # or equivalent
 sudo apt-get install libatlas-base-dev # or equivalent
 pip install -r requirements.txt
 ```
 
-Then add current directory to `$PYTHONPATH`:
+Then add project and reconstruction methods directories to `$PYTHONPATH`:
 
 ```bash
-export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory"
+export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory/"
+export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory/src/reconstruction_methods/" # this is because of ray's relative import inability
 ```
 
-Following commands assume the name of the folder is `cython_omp`.
+Following commands assume the name of the folder is `cython-omp`.
 
 ## Dictionary Learning
 
 To learn the overcomplete dictionary, run:
 
 ```bash
-python -m cython_omp.src.learn_patch_dict
+python -m cython-omp.src.learn_patch_dict
 ```
 
 ## Compiling Cython scripts
@@ -39,8 +39,18 @@ python lasso_setup.py build_ext --inplace
 ## Reconstruction Demo
 
 ```bash
-python -m cython_omp.src.demo
+python -m cython_omp.src.demo --method=<method>
 ```
+
+choices for the method are: 
+- OMP_numba
+- OMP_batch_numba
+- OMP_cython
+- OMP_batch_cython (default)
+- lasso_numba
+- lasso_batch_numba
+- lasso_cython
+- lasso_batch_cython
 
 ## License
 
