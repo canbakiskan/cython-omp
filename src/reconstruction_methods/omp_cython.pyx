@@ -1,3 +1,6 @@
+#!python
+# cython: embedsignature=True, binding=True
+
 cimport cython
 cimport numpy as np
 import numpy as np
@@ -19,7 +22,7 @@ def OMP_batch_cython(const float[:,::1] patches, const float[:,::1] phi, const i
     return np.asarray(OMP_batch_cython_cdef(patches, phi, nb_ompcomp))
 
 def OMP_cython(const float[:,::1] patch, const float[:,::1] phi, const int nb_ompcomp):
-    return np.asarray(OMP_cython_cdef(patches, phi, nb_ompcomp))
+    return np.asarray(OMP_cython_cdef(patch, phi, nb_ompcomp))
 
 
 @cython.boundscheck(False)

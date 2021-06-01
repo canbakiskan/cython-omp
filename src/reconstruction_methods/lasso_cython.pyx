@@ -1,3 +1,6 @@
+#!python
+# cython: embedsignature=True, binding=True
+
 cimport cython
 cimport numpy as np
 import numpy as np

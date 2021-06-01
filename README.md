@@ -15,7 +15,7 @@ Then add project and reconstruction methods directories to `$PYTHONPATH`:
 
 ```bash
 export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory/"
-export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory/src/reconstruction_methods/" # this is because of ray's relative import inability
+export PYTHONPATH="${PYTHONPATH}:/path/containing/project/directory/cython-omp/src/reconstruction_methods/" # this is because of ray's relative import inability
 ```
 
 Following commands assume the name of the folder is `cython-omp`.
